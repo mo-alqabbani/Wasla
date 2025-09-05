@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>وصلة - دليل المواصلات</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Country Selection Modal -->
+    <div id="countryModal" class="modal active">
+        <div class="modal-content">
+            <div class="country-selection">
+                <div class="logo-section">
+                    <div class="logo"></div>
+                    <h1>وصلة</h1>
+                </div>
+                <h2 id="countryTitle">اختر الدولة للبحث عن وسائل المواصلات</h2>
+                <div class="country-options">
+                    <div class="country-card" onclick="selectCountry('egypt')">
+                        <div class="country-flag">🇪🇬</div>
+                        <h3 id="egyptOption">مصر</h3>
+                        <p id="egyptDesc">شبكة مواصلات متكاملة</p>
+                    </div>
+                    <div class="country-card disabled" onclick="selectCountry('other')">
+                        <div class="country-flag">🌍</div>
+                        <h3 id="otherOption">دول أخرى</h3>
+                        <p id="otherDesc">قريباً</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main App -->
+    <div id="mainApp" class="hidden">
+        <!-- Header -->
+        <header class="header">
+            <div class="container">
+                <div class="nav-brand">
+                    <div class="logo"></div>
+                    <div class="brand-text">
+                        <h1 id="appTitle">وصلة</h1>
+                    </div>
+                </div>
+                
+                <nav class="nav-menu">
+                    <button class="nav-btn active" onclick="showSection('home')" id="homeNav">الرئيسية</button>
+                    <button class="nav-btn" onclick="showSection('stations')" id="stationsNav">المحطات الرئيسية</button>
+                    <button class="nav-btn" onclick="showSection('routes')" id="routesNav">المحطات المحفوظة</button>
+                    <button class="nav-btn" onclick="showSection('search')" id="searchNav">البحث اليدوي</button>
+                    <button class="nav-btn" onclick="showSection('chat')" id="chatNav">المساعد الذكي</button>
+                </nav>
+
+                <div class="header-controls">
+                    <button class="lang-btn" onclick="toggleLanguage()" id="langBtn">English</button>
+                    <div class="auth-buttons">
+                        <button class="auth-btn login-btn" onclick="showAuthModal('login')" id="loginBtn">تسجيل دخول</button>
+                        <button class="auth-btn register-btn" onclick="showAuthModal('register')" id="registerBtn">إنشاء حساب</button>
+                    </div>
+                    <div class="user-info hidden" id="userInfo">
+                        <div class="currency-display">
+                            <span id="currencyAmount">0</span>
+                            <span id="currencyLabel">نقطة</span>
+                        </div>
+                        <div class="user-menu">
+                            <button class="user-avatar" onclick="toggleUserMenu()">👤</button>
+                            <div class="dropdown-menu hidden" id="userDropdown">
+                                <button onclick="showProfile()" id="profileBtn">الملف الشخصي</button>
+                                <button onclick="logout()" id="logoutBtn">تسجيل خروج</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Home Section -->
+            <section id="homeSection" class="section active">
+                <div class="hero-section">
+                    <div class="container">
+                        <div class="hero-content">
+                            <h1 id="heroTitle">تنقل في <span class="highlight">مصر</span> بسهولة</h1>
+                            <p id="heroDesc">دليلك الشامل للمواصلات في مصر - خطوط مترو، أتوبيسات، ميكروباصات - كلها في منصة ذكية واحدة</p>
+                            
+                            <div class="hero-actions">
+                                <button class="cta-btn primary" onclick="showSection('chat')" id="askAssistantBtn">🤖 اسأل المساعد الذكي</button>
+                                <button class="cta-btn secondary" onclick="showSection('search')" id="manualSearchBtn">🔍 ابحث عن الطريق</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Features Grid -->
+                <div class="features-section">
+                    <div class="container">
+                        <div class="features-grid">
+                            <div class="feature-card" onclick="showSection('routes')">
+                                <div class="feature-icon purple">🚇</div>
+                                <h3 id="routesFeature">طرق المترو</h3>
+                                <p id="routesDesc">اعثر على طرق مترو مصر وساعد في تحسين الشبكة</p>
+                                <div class="feature-action">
+                                    <span id="exploreRoutes">استكشف</span>
+                                    <span class="arrow">←</span>
+                                </div>
+                            </div>
+
+                            <div class="feature-card" onclick="showSection('stations')">
+                                <div class="feature-icon orange">📍</div>
+                                <h3 id="stationsFeature">المحطات المهمة</h3>
+                                <p id="stationsDesc">استكشف المحطات الرئيسية مثل رمسيس ومحيط وأسيوط</p>
+                                <div class="feature-action">
+                                    <span id="exploreStations">استكشف</span>
+                                    <span class="arrow">←</span>
+                                </div>
+                            </div>
+
+                            <div class="feature-card" onclick="showSection('search')">
+                                <div class="feature-icon green">🔍</div>
+                                <h3 id="searchFeature">البحث اليدوي</h3>
+                                <p id="searchDesc">ابحث عن الطريق بدءاً من عنوان الانطلاق</p>
+                                <div class="feature-action">
+                                    <span id="startSearch">استكشف</span>
+                                    <span class="arrow">←</span>
+                                </div>
+                            </div>
+
+                            <div class="feature-card" onclick="showSection('chat')">
+                                <div class="feature-icon blue">💬</div>
+                                <h3 id="chatFeature">المساعد الذكي</h3>
+                                <p id="chatDesc">اسأل بلغة عادية - "أريد الذهاب من مدينة نصر إلى مدينة أخرى"</p>
+                                <div class="feature-action">
+                                    <span id="startChat">استكشف</span>
+                                    <span class="arrow">←</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Stats Section -->
+                <div class="stats-section">
+                    <div class="container">
+                        <h2 id="networkTitle">شبكة المواصلات</h2>
+                        <div class="stats-grid">
+                            <div class="stat-card">
+                                <div class="stat-number purple">+50</div>
+                                <div class="stat-label" id="mainStations">المحطات الرئيسية</div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-number orange">+1000</div>
+                                <div class="stat-label" id="microbusLines">خطوط الميكروباص</div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-number green">+500</div>
+                                <div class="stat-label" id="busLines">خطوط الأتوبيس</div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-number blue">3</div>
+                                <div class="stat-label" id="metroLines">خطوط المترو</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Chat Section -->
+            <section id="chatSection" class="section">
+                <div class="container">
+                    <div class="section-header">
+                        <h2 id="chatTitle">المساعد الذكي</h2>
+                        <p id="chatSubtitle">اسأل عن أي طريق مواصلات في مصر</p>
+                    </div>
+                    
+                    <div class="chat-container">
+                        <div class="chat-messages" id="chatMessages">
+                            <div class="message bot-message">
+                                <div class="message-avatar">🤖</div>
+                                <div class="message-content">
+                                    <p id="welcomeMsg">مرحباً! اسألني عن أي طريق مواصلات في مصر. مثال: "أريد الذهاب من مدينة نصر إلى السادس من أكتوبر"</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="chat-input-container">
+                            <input type="text" id="chatInput" placeholder="اكتب سؤالك هنا...">
+                            <button onclick="sendMessage()" id="sendBtn">إرسال</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Search Section -->
+            <section id="searchSection" class="section">
+                <div class="container">
+                    <div class="section-header">
+                        <h2 id="searchTitle">البحث اليدوي</h2>
+                        <p id="searchSubtitle">ابحث عن أفضل الطرق بين أي نقطتين</p>
+                    </div>
+                    
+                    <div class="search-container">
+                        <div class="search-form">
+                            <div class="search-row">
+                                <div class="input-group">
+                                    <label id="fromLabel">من</label>
+                                    <input type="text" id="fromInput" placeholder="نقطة البداية">
+                                </div>
+                                <button class="swap-btn" onclick="swapLocations()">⇄</button>
+                                <div class="input-group">
+                                    <label id="toLabel">إلى</label>
+                                    <input type="text" id="toInput" placeholder="نقطة الوصول">
+                                </div>
+                            </div>
+                            <button class="search-btn" onclick="searchRoute()" id="searchRouteBtn">ابحث عن الطريق</button>
+                        </div>
+
+                        <!-- Search Results -->
+                        <div class="results-container hidden" id="resultsContainer">
+                            <h3 id="resultsTitle">نتائج البحث</h3>
+                            <div id="routeResults"></div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Stations Section -->
+            <section id="stationsSection" class="section">
+                <div class="container">
+                    <div class="section-header">
+                        <h2 id="stationsTitle">المحطات الرئيسية</h2>
+                        <p id="stationsSubtitle">اكتشف أهم محطات المواصلات في مصر</p>
+                    </div>
+                    
+                    <div class="stations-grid">
+                        <div class="station-card" onclick="showStationDetails('ramses')">
+                            <div class="station-icon">🚉</div>
+                            <h3>محطة رمسيس</h3>
+                            <p>المحطة المركزية الرئيسية</p>
+                            <div class="station-stats">
+                                <span>15 خط</span>
+                                <span>3-25 جنيه</span>
+                            </div>
+                        </div>
+                        <div class="station-card" onclick="showStationDetails('abboud')">
+                            <div class="station-icon">🚇</div>
+                            <h3>العباسية</h3>
+                            <p>نقطة تجمع المواصلات</p>
+                            <div class="station-stats">
+                                <span>12 خط</span>
+                                <span>2-20 جنيه</span>
+                            </div>
+                        </div>
+                        <div class="station-card" onclick="showStationDetails('elmonib')">
+                            <div class="station-icon">🚌</div>
+                            <h3>المنيب</h3>
+                            <p>بوابة الجيزة الجنوبية</p>
+                            <div class="station-stats">
+                                <span>8 خطوط</span>
+                                <span>2-15 جنيه</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Routes Section -->
+            <section id="routesSection" class="section">
+                <div class="container">
+                    <div class="section-header">
+                        <h2 id="routesTitle">إدارة الطرق</h2>
+                        <p id="routesSubtitle">شارك واكتشف طرق جديدة</p>
+                        <button class="add-route-btn" onclick="showAddRouteModal()" id="addRouteBtn">إضافة طريق جديد</button>
+                    </div>
+                    
+                    <div class="routes-filters">
+                        <select id="transportType">
+                            <option value="all">جميع الوسائل</option>
+                            <option value="metro">مترو</option>
+                            <option value="bus">أتوبيس</option>
+                            <option value="microbus">ميكروباص</option>
+                        </select>
+                        <input type="text" id="routeSearch" placeholder="ابحث في الطرق...">
+                    </div>
+                    
+                    <div class="routes-list" id="routesList">
+                        <!-- Routes will be populated here -->
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <div class="container">
+                <div class="footer-content">
+                    <div class="footer-brand">
+                        <div class="logo">🚇</div>
+                        <div>
+                            <h3>وصلة</h3>
+                            <p id="footerDesc">دليلك الشامل للمواصلات في مصر</p>
+                        </div>
+                    </div>
+                    <div class="footer-links">
+                        <a href="#" id="aboutLink">عن وصلة</a>
+                        <a href="#" id="helpLink">المساعدة</a>
+                        <a href="#" id="privacyLink">الخصوصية</a>
+                    </div>
+                    <div class="footer-credit">
+                        <p>Made by <a href="https://www.linkedin.com/in/mohammed-mo-alqabbani/" target="_blank">Mohamed Mohamed</a></p>
+                    </div>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <!-- Authentication Modal -->
+    <div id="authModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeAuthModal()">&times;</span>
+            <div id="loginForm" class="auth-form">
+                <h2 id="loginTitle">تسجيل الدخول</h2>
+                <form onsubmit="handleLogin(event)">
+                    <input type="email" id="loginEmail" placeholder="البريد الإلكتروني" required>
+                    <input type="password" id="loginPassword" placeholder="كلمة المرور" required>
+                    <button type="submit" id="loginSubmit">دخول</button>
+                </form>
+                <p id="switchToRegister">ليس لديك حساب؟ <a href="#" onclick="switchAuthForm('register')">أنشئ حساباً جديداً</a></p>
+            </div>
+            <div id="registerForm" class="auth-form hidden">
+                <h2 id="registerTitle">إنشاء حساب جديد</h2>
+                <form onsubmit="handleRegister(event)">
+                    <input type="text" id="registerName" placeholder="الاسم الكامل" required>
+                    <input type="email" id="registerEmail" placeholder="البريد الإلكتروني" required>
+                    <input type="password" id="registerPassword" placeholder="كلمة المرور" required>
+                    <input type="password" id="confirmPassword" placeholder="تأكيد كلمة المرور" required>
+                    <button type="submit" id="registerSubmit">إنشاء الحساب</button>
+                </form>
+                <p id="switchToLogin">لديك حساب بالفعل؟ <a href="#" onclick="switchAuthForm('login')">سجل دخولك</a></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Route Modal -->
+    <div id="addRouteModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeAddRouteModal()">&times;</span>
+            <h2 id="addRouteTitle">إضافة طريق جديد</h2>
+            <form onsubmit="handleAddRoute(event)" class="add-route-form">
+                <div class="form-group">
+                    <label id="routeFromLabel">من</label>
+                    <input type="text" id="routeFrom" required>
+                </div>
+                <div class="form-group">
+                    <label id="routeToLabel">إلى</label>
+                    <input type="text" id="routeTo" required>
+                </div>
+                <div class="form-group">
+                    <label id="transportTypeLabel">نوع المواصلة</label>
+                    <select id="routeTransportType" required>
+                        <option value="metro">مترو</option>
+                        <option value="bus">أتوبيس</option>
+                        <option value="microbus">ميكروباص</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label id="routeFareLabel">التكلفة</label>
+                    <input type="number" id="routeFare" min="1" required>
+                </div>
+                <div class="form-group">
+                    <label id="routeTimeLabel">مدة الرحلة (دقيقة)</label>
+                    <input type="number" id="routeTime" min="1" required>
+                </div>
+                <div class="form-group">
+                    <label id="routeNotesLabel">ملاحظات إضافية</label>
+                    <textarea id="routeNotes" rows="3"></textarea>
+                </div>
+                <button type="submit" id="submitRoute">إضافة الطريق (+10 نقاط)</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
